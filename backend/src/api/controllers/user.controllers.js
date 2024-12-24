@@ -304,7 +304,10 @@ const changePassword = async (req, res, next) => {
     const userDb = await User.findOne({ email });
 
     if (userDb) {
-      return res.redirect(307, `${BASE_URL}/users/sendPassword/${userDb._id}`);
+      return res.redirect(
+        307,
+        `https://fptfgauth-production.up.railway.app/api/v1/users/sendPassword/${userDb._id}`
+      );
     } else {
       return res.status(404).json('User no register');
     }
