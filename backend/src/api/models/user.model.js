@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema(
 );
 /**
  * Antes de guardar el model vamos hasear la contraseña para que se guarde en la base
- * de datos 
+ * de datos
  */
 UserSchema.pre('save', async function (next) {
   try {
@@ -58,6 +58,6 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
-// Creamos el modelo 
+// Creamos el modelo
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

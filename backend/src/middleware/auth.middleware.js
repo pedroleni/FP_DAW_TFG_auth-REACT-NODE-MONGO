@@ -4,18 +4,17 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const isAuth = async (req, res, next) => {
-
   // sacamos el token de la request del front
   const token = req.headers.authorization?.replace('Bearer ', '');
-  // si no tenemos token vamos lanzar un error 
+  // si no tenemos token vamos lanzar un error
   if (!token) {
     return next(new Error('Unauthorized'));
   }
 
   try {
     /**
-     * Decodificamos el token con el jwt secret y nos da el id 
-     * Para poder encontrar el usuario que nos envia el token 
+     * Decodificamos el token con el jwt secret y nos da el id
+     * Para poder encontrar el usuario que nos envia el token
      * y lo guardamos en el req.user para que el controlador
      * pueda utilizarlo
      */

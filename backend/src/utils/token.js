@@ -4,7 +4,7 @@ dotenv.config();
 
 const generateToken = (id, email) => {
   /**
-   * Generamos el token con el id y el email 
+   * Generamos el token con el id y el email
    */
   if (!id || !email) {
     throw new Error('Email or id are missing');

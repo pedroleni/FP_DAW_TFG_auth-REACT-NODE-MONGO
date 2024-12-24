@@ -25,6 +25,7 @@ const connect = async () => {
     );
   } catch (error) {
     console.log('No se ha conectado la db❌');
+    console.log(error);
   }
 };
 

@@ -280,6 +280,7 @@ const checkNewUser = async (req, res, next) => {
     }
   } catch (error) {
     // siempre en el catch devolvemos un 500 con el error general
+    console.log(error);
     return next(setError(500, 'General error check code'));
   }
 };
@@ -447,7 +448,7 @@ const update = async (req, res, next) => {
     req.file && (patchUser.image = catchImg);
 
     /**
-     * vamos a incluir el valor actual a las claves que no queremos 
+     * vamos a incluir el valor actual a las claves que no queremos
      * que se modifique
      */
     patchUser._id = req.user._id;
@@ -459,7 +460,7 @@ const update = async (req, res, next) => {
     patchUser.gender = req.user.gender;
 
     try {
-      // actualizamos el usuario cuando tengamos incluidas las actualizaciones 
+      // actualizamos el usuario cuando tengamos incluidas las actualizaciones
       await User.findByIdAndUpdate(req.user._id, patchUser);
 
       /**
@@ -468,9 +469,8 @@ const update = async (req, res, next) => {
        */
       if (req.file) deleteImgCloudinary(req.user.image);
 
-      
       /**
-       * ---------PRUEBAS EN EL RUNTIME PARA COMPROBAR QUE ACTUALIZÓ CORRECTAMENTE--- 
+       * ---------PRUEBAS EN EL RUNTIME PARA COMPROBAR QUE ACTUALIZÓ CORRECTAMENTE---
        */
       const updateUser = await User.findById(req.user._id);
 
@@ -480,21 +480,19 @@ const update = async (req, res, next) => {
       // generamos un array con los test que generaremos
       const testUpdate = [];
 
-      // recorremos el array de las claves que queremos actualizar 
+      // recorremos el array de las claves que queremos actualizar
       updateKeys.forEach((item) => {
-       
         // si el valor actualizado es igual al que nos mando para actualizar entramos al if
         if (updateUser[item] === req.body[item]) {
           // pero vamos a comprobar si era diferente al que tenia inicialmente
           if (updateUser[item] != req.user[item]) {
-            
             testUpdate.push({
               [item]: true,
             });
           } else {
             // si es igual al que ya teniamos vamos a incluir que igual a la antigua informacion
             testUpdate.push({
-              [item]: "sameOldInfo",
+              [item]: 'sameOldInfo',
             });
           }
         } else {
@@ -527,12 +525,10 @@ const update = async (req, res, next) => {
       return res.status(404).json(error.message);
     }
   } catch (error) {
-    
     if (req.file) deleteImgCloudinary(catchImg);
     return next(error);
   }
 };
-
 
 //! -----------------------------------------------------------------------------
 //? ----------------------------- DELETE ----------------------------------------
@@ -558,7 +554,6 @@ const deleteUser = async (req, res, next) => {
     return next(error);
   }
 };
-
 
 module.exports = {
   register,
