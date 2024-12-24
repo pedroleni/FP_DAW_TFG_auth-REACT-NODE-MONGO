@@ -305,7 +305,7 @@ const changePassword = async (req, res, next) => {
 
     if (userDb) {
       return res.redirect(
-        307,
+        
         `https://fptfgauth-production.up.railway.app/api/v1/users/sendPassword/${userDb._id}`
       );
     } else {
