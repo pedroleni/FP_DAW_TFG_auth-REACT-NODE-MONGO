@@ -4,7 +4,7 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const dotenv = require('dotenv');
 dotenv.config();
 
-//Creamos el almacen
+//Creamos el almacen para poder subir la imagen
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -13,7 +13,7 @@ const storage = new CloudinaryStorage({
   },
 });
 
-//Creamos la función de subir imagenes
+//Creamos la función de subir imagenes que utilizara el middleware
 const upload = multer({ storage });
 
 //Función de borrado de imagenes
@@ -27,7 +27,7 @@ const deleteImgCloudinary = (imgUrl) => {
     console.log('Image delete in cloudinary');
   });
 };
-
+// Funcion para configurar cloudinary
 const configCloudinary = () => {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

@@ -45,7 +45,10 @@ const UserSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
+/**
+ * Antes de guardar el model vamos hasear la contraseña para que se guarde en la base
+ * de datos 
+ */
 UserSchema.pre('save', async function (next) {
   try {
     this.password = await bcrypt.hash(this.password, 10);
@@ -55,5 +58,6 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
+// Creamos el modelo 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

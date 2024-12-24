@@ -13,7 +13,7 @@ const randomPassword = require('../../utils/randomPassword');
 const BASE_URL = process.env.BASE_URL;
 
 //! -----------------------------------------------------------------------------
-//? ----------------------------REGISTER ------------------------
+//? ----------------------------REGISTER ----------------------------------------
 //! -----------------------------------------------------------------------------
 const register = async (req, res, next) => {
   // capturamo la imagen por si hae falta borrarla ante un error
@@ -142,7 +142,7 @@ const login = async (req, res, next) => {
 };
 
 //! -----------------------------------------------------------------------------
-//? --------------------------------AUTOLOGIN ---------------------------------------
+//? --------------------------------AUTOLOGIN -----------------------------------
 //! -----------------------------------------------------------------------------
 
 const autoLogin = async (req, res, next) => {
@@ -179,7 +179,7 @@ const autoLogin = async (req, res, next) => {
 };
 
 //! -----------------------------------------------------------------------------
-//? -----------------------RESEND CODE -----------------------------
+//? -----------------------RESEND CODE ------------------------------------------
 //! -----------------------------------------------------------------------------
 const resendCode = async (req, res, next) => {
   try {
@@ -384,7 +384,7 @@ const sendPassword = async (req, res, next) => {
 };
 
 //? -----------------------------------------------------------------------------
-//! ------------------CAMBIO DE CONTRASEÑA CUANDO YA SE ESTA ESTA LOGADO---------------
+//! ------------------CAMBIO DE CONTRASEÑA CUANDO YA SE ESTA ESTA LOGADO---------
 //? -----------------------------------------------------------------------------
 const modifyPassword = async (req, res, next) => {
   try {
@@ -431,13 +431,134 @@ const modifyPassword = async (req, res, next) => {
 //! -----------------------------------------------------------------------------
 //? ---------------------------------UPDATE--------------------------------------
 //! -----------------------------------------------------------------------------
-const update = async (req, res, next) => {};
+
+const update = async (req, res, next) => {
+  // guardamos la imagen subida si el user nos pidio actualziarla
+  let catchImg = req.file?.path;
+
+  try {
+    // actualizamos los indexes de los elementos unicos por si el modelo ha cambiado
+    await User.syncIndexes();
+
+    // generamos una nueva instancia del modelo del user
+    const patchUser = new User(req.body);
+
+    // si hay imagen vamos a ponerlo en la nueva instancia del usuario
+    req.file && (patchUser.image = catchImg);
+
+    /**
+     * vamos a incluir el valor actual a las claves que no queremos 
+     * que se modifique
+     */
+    patchUser._id = req.user._id;
+    patchUser.password = req.user.password;
+    patchUser.rol = req.user.rol;
+    patchUser.confirmationCode = req.user.confirmationCode;
+    patchUser.email = req.user.email;
+    patchUser.check = req.user.check;
+    patchUser.gender = req.user.gender;
+
+    try {
+      // actualizamos el usuario cuando tengamos incluidas las actualizaciones 
+      await User.findByIdAndUpdate(req.user._id, patchUser);
+
+      /**
+       * Si no paso para actualizar la imagen procedemos a borrar la antigua imagen
+       * que se encuentra en el usuario autenticado con el token
+       */
+      if (req.file) deleteImgCloudinary(req.user.image);
+
+      
+      /**
+       * ---------PRUEBAS EN EL RUNTIME PARA COMPROBAR QUE ACTUALIZÓ CORRECTAMENTE--- 
+       */
+      const updateUser = await User.findById(req.user._id);
+
+      // sacamos las claves del objeto del body para saber que cosas quiso el user actualizar
+      const updateKeys = Object.keys(req.body); // ["name"]
+
+      // generamos un array con los test que generaremos
+      const testUpdate = [];
+
+      // recorremos el array de las claves que queremos actualizar 
+      updateKeys.forEach((item) => {
+       
+        // si el valor actualizado es igual al que nos mando para actualizar entramos al if
+        if (updateUser[item] === req.body[item]) {
+          // pero vamos a comprobar si era diferente al que tenia inicialmente
+          if (updateUser[item] != req.user[item]) {
+            
+            testUpdate.push({
+              [item]: true,
+            });
+          } else {
+            // si es igual al que ya teniamos vamos a incluir que igual a la antigua informacion
+            testUpdate.push({
+              [item]: "sameOldInfo",
+            });
+          }
+        } else {
+          testUpdate.push({
+            [item]: false,
+          });
+        }
+      });
+
+      // ---------> PRUEBAS PARA LA IMAGEN --------
+      if (req.file) {
+        // comprobamos si la URL de la imagen subida es igual a la actualizada en la base de datos
+        updateUser.image === catchImg
+          ? testUpdate.push({
+              image: true,
+            })
+          : testUpdate.push({
+              image: false,
+            });
+      }
+
+      // lanzamos el test con las pruebas y le usuario actualizado
+      return res.status(200).json({
+        updateUser,
+        testUpdate,
+      });
+    } catch (error) {
+      // si hubo un error y nos pido cambiar la imagen vamos a borrar la imagen nueva subida
+      if (req.file) deleteImgCloudinary(catchImg);
+      return res.status(404).json(error.message);
+    }
+  } catch (error) {
+    
+    if (req.file) deleteImgCloudinary(catchImg);
+    return next(error);
+  }
+};
+
 
 //! -----------------------------------------------------------------------------
 //? ----------------------------- DELETE ----------------------------------------
 //! -----------------------------------------------------------------------------
 
-const deleteUser = async (req, res, next) => {};
+const deleteUser = async (req, res, next) => {
+  try {
+    /**
+     * Sacamos del token  que nos envia el id y la imagen
+     *  - El id para buscar el usuario que pide borrarse
+     *  - La imagen para enviarla al middleware y borrado
+     */
+    const { _id, image } = req.user;
+    await User.findByIdAndDelete(_id);
+    if (await User.findById(_id)) {
+      return res.status(404).json('not deleted');
+    } else {
+      // si el usuario no existe quiere decir que podemos borrar la imagen
+      deleteImgCloudinary(image);
+      return res.status(200).json('ok delete');
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
 
 module.exports = {
   register,
