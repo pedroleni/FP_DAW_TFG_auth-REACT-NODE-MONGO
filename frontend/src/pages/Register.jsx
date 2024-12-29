@@ -9,8 +9,22 @@ import { useRegisterError } from "../hooks";
 
 export const Register = () => {
   // allUser es la respuesta completa del 200 del service de registro
-  const { allUser, bridgeData, setDeleteUser } = useAuth();
+  // NOS TRAEMOS LOS ESTADO Y FUNCIONES DEL CONTEXTO DE AUTH
+  const { bridgeData, setDeleteUser } = useAuth();
+
+  /**
+   * Utlizamos las funciones register y handleSubmit para registrar los datos de los input 
+   * y con el handleSubmit decirle que funcion recibira el objeto con los datos registrados
+   * para su gestion
+   */
   const { register, handleSubmit } = useForm();
+
+
+  /**
+   * ESTADO QUE GESTIONAN LA RESPUESTA de la API, 
+   * ESTADO SEND que gestiona cuando se esta emitiendo una peticion a la API
+   * ESTADO okRegister que sirve para saber si ha realizado correctamente el registro 
+   */
   const [res, setRes] = useState({});
   const [send, setSend] = useState(false);
   const [okRegister, setOkRegister] = useState(false);
@@ -19,20 +33,25 @@ export const Register = () => {
   //! ------------------------------------------------------------------------------
 
   const formSubmit = async (formData) => {
+
+    // vamos a ver si tenemos imagen en el input de tipo file
     const inputFile = document.getElementById("file-upload").files;
 
+    /// --------- SI HAY IMAGEN --------------------------
     if (inputFile.length != 0) {
-      // si es diferente a cero quiere decir que tenemos una imagen
+      
+      // incluimos la imagen en la data que enviamos a la API
       const custonFormData = {
         ...formData,
         image: inputFile[0],
       };
-
+      
+      // con el estado send nos sirve para deshabilitar los botones cuando se haya enviado una request
       setSend(true);
       setRes(await registerUser(custonFormData));
       setSend(false);
     } else {
-      // en este caso no hay imagen y nos quedamos con lo que tenemos en el form data
+      // ---------- SI NO HAY IMAGEN -----------------------
       const custonFormData = {
         ...formData,
       };
@@ -44,23 +63,31 @@ export const Register = () => {
   };
 
   //! ------------------------------------------------------------------------------
-  //? 2) funcion que se encarga del formulario- de la data del formulario
+  //? 2) Con el useEffect vamos a comprobar los errores en la respuesta 
   //! ------------------------------------------------------------------------------
+
+  /**
+   * Este useEffect se va a lanzar cuando se monte el componente y cuando cambie el valor de 
+   * res
+   */
   useEffect(() => {
     useRegisterError(res, setOkRegister, setRes);
     if (res?.status == 200) bridgeData("ALLUSER");
   }, [res]);
 
-  useEffect(() => {}, [allUser]);
+
 
   useEffect(() => {
     setDeleteUser(() => false);
   }, []);
 
   //! ------------------------------------------------------------------------------
-  //? 3) Estados de navegacion ----> lo veremos en siguiente proyectos
+  //? 3) Estados de navegacion
   //! ------------------------------------------------------------------------------
   if (okRegister) {
+
+    // si se registro correctamente vamos a ir a verifyCode 
+    // recordamos que previamente hemos gestionado en el hook de errores el autologin 
     return <Navigate to="/verifyCode" />;
   }
 

@@ -11,8 +11,9 @@ import {
   FormProfile,
   ChangePassword,
 } from "../pages";
-import { Protected } from "../components";
-import ProtectedCheckChildren from "../components/ProtectedRoute/ProtectedCheckChildren";
+import { Protected, ProtectedCheckChildren } from "../components";
+
+
 
 export const router = createBrowserRouter([
   {

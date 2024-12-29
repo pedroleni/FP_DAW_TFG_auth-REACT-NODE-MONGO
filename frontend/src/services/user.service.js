@@ -1,6 +1,10 @@
 import { updateToken } from "../utils";
 import { APIuser } from "./serviceApiUse.config";
 
+/**
+ * Archivo con los diferentes endpoint de la API
+ */
+
 //! ------------------------------- REGISTER -----------------------------------
 export const registerUser = async (formData) => {
   return APIuser()

@@ -2,8 +2,18 @@ import Swal from "sweetalert2/dist/sweetalert2.all.js";
 export const useChangePasswordError = (res, setRes, setUser) => {
   //!----------------- 200: updateUser: true,
   if (res?.data?.updateUser?.toString() == "true") {
+
+    // ponemos el user a null para asi deslogar al usuario 
+
+    /**
+     * Al deslogar el user obligamos que se 
+     * vuelva a logar y recargen todos los datos de nuevo 
+     * 
+     */
     setUser(() => null);
     localStorage.removeItem("user");
+
+    // siempre que utlizamos el estado de la respuesta la reiniciamos al valor inicial
     setRes(() => ({}));
     return Swal.fire({
       icon: "success",

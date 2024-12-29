@@ -1,14 +1,36 @@
 import { createContext, useContext, useMemo, useState } from "react";
 
 const AuthContext = createContext();
-
+/**
+ * ---------------------------------------------------------------------
+ * --------------------- CONTEXTO DONDE GESTIONAMOS LA AUTH-------------
+ * ---------------------------------------------------------------------
+ */
 export const AuthContextProvider = ({ children }) => {
+
+
+
+  /**
+ * ---------------------------------------------------------------------
+ * --------------------- ESTADO QUE GESTIONA EL USER LOGADO-------------
+ * ---------------------------------------------------------------------
+ * 
+ * Comprueba si hay ya un usuario logado guardado en localstorage por si el usuario 
+ * recarga la pagina por ejemplo asi su estado inicial se resetea con lo que haya actualmente 
+ */
   const [user, setUser] = useState(() => {
     const user = localStorage.getItem("user");
 
     return user ? JSON.parse(user) : null;
   });
 
+   /**
+ * -------------------------------------------------------------------------------------------------
+ * ----- ESTADO PARA SABER SI EL USUARIO SE HA BORRRADO POR PETICION DEL USUARIO MISMO -------------
+ * -------------------------------------------------------------------------------------------------
+ * 
+ * 
+ */
   const [deleteUser, setDeleteUser] = useState(false);
 
   const [allUser, setAllUser] = useState({
@@ -51,7 +73,13 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.removeItem("user");
     setUser(null);
   };
+   /**
+ * -------------------------------------------------------------------------------
+ * ------ MEMORIZAMOS LA INFO, SE REMEMORIZA CUANDO CAMBIE EL USUARIO-------------
+ * -------------------------------------------------------------------------------
+ * 
 
+ */
   const value = useMemo(
     () => ({
       user,
@@ -70,4 +98,10 @@ export const AuthContextProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+
+ /**
+ * ---------------------------------------------------------------------
+ * -----CUSTOM HOOK QUE FACILITA LA UTILIZACION DEL CONTEXTO-------------
+ * ---------------------------------------------------------------------
+ */
 export const useAuth = () => useContext(AuthContext);

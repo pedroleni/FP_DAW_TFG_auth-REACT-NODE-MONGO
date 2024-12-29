@@ -8,7 +8,7 @@ export const useRegisterError = (res, setRegisterOk, setRes) => {
     const dataToString = JSON.stringify(res);
     localStorage.setItem("data", dataToString);
     setRegisterOk(() => true);
-    //setAllUser(() => res.data);
+    
 
     Swal.fire({
       icon: "success",
