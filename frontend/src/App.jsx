@@ -1,11 +1,15 @@
+import { Outlet } from "react-router-dom";
 import "./App.css";
+import { Footer, Header } from "./components";
 
 export const App = () => {
   return (
     <>
+      <Header />
       <main>
-        <h1>prueba</h1>
+        <Outlet />
       </main>
+      <Footer />
     </>
   );
 };

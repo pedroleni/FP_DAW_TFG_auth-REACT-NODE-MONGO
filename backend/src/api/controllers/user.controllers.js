@@ -304,7 +304,7 @@ const changePassword = async (req, res, next) => {
     const userDb = await User.findOne({ email });
 
     if (userDb) {
-      return res.redirect(307,
+      return res.redirect(
         
         `https://fptfgauth-production.up.railway.app/api/v1/users/sendPassword/${userDb._id}`
       );

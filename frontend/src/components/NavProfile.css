@@ -1,0 +1,15 @@
+.iconDeleteUser {
+  border-radius: 50%;
+}
+
+.containerNavProfile {
+  background-color: var(--background-color);
+  height: 12vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  border-radius: 20px;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
