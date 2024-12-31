@@ -1,0 +1,14 @@
+{
+  "routes": [
+    { "src": "/", "dest": "/" },
+    { "src": "/register", "dest": "/" },
+    { "src": "/login", "dest": "/" },
+    { "src": "/forgotPassword", "dest": "/" },
+    { "src": "/dashboard", "dest": "/" },
+    { "src": "/verifyCode", "dest": "/" },
+    { "src": "/profile", "dest": "/" },
+    { "src": "/profile/changePassword", "dest": "/" },
+    { "src": "/profile/", "dest": "/" },
+    { "src": "/[^.]+", "dest": "/", "status": 200 }
+  ]
+}

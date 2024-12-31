@@ -12,4 +12,24 @@ export const ProtectedCheckChildren = ({ children }) => {
   return children;
 };
 
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
+const Login = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    
+    console.log("Usuario autenticado");
+    navigate("/dashboard"); // Redirige a la página de Dashboard
+  };
+
+  return (
+    <div>
+      <h1>Página de Inicio de Sesión</h1>
+      <button onClick={handleLogin}>Iniciar Sesión</button>
+    </div>
+  );
+};
+
+export default Login;
