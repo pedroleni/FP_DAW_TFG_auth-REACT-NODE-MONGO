@@ -24,10 +24,18 @@ export const CheckCode = () => {
   const [userNotFound, setUserNotFound] = useState(false);
   //! -------FUNCION QUE GESTIONA LA DATA DEL FORMULARIO-------
   const formSubmit = async (formData) => {
+
+    /**
+     * -- VAMOS A COMPROBAR POR DONDE ESTA EL USUARIO ACCEDIENDO AL CHECK SI DESDE EL LOGIN O DESDE EL REGISTER-----
+     * ya que si es desde el registro utilizaremos el estado allUser del contexto
+     */
     const userLocal = localStorage.getItem("user");
 
+
+
+    /// --------------- ACCEDE DESDE EL REGISTER -----------
     if (userLocal == null) {
-      /// entramos por el register
+      
       const custFormData = {
         confirmationCode: parseInt(formData.confirmationCode),
         email: allUser.data.user.email,
@@ -36,7 +44,7 @@ export const CheckCode = () => {
       setRes(await checkCodeConfirmationUser(custFormData));
       setSend(false);
     } else {
-      // estamos entrando por el login
+          /// --------------- ACCEDE DESDE EL LOGIN -----------
       const parseUser = JSON.parse(userLocal);
       const customFormData = {
         email: parseUser.email,
@@ -47,7 +55,9 @@ export const CheckCode = () => {
       setSend(false);
     }
   };
-
+  /**
+   * ------------FUNCION ENCARGADA DEL REENVIAR EL CÓDIGO --------------
+   */
   const handleReSend = async () => {
     const userLocal = localStorage.getItem("user");
     if (userLocal != null) {
@@ -88,8 +98,8 @@ export const CheckCode = () => {
 
   //! -------- PONEMOS LOS CONDICIONALES QUE EVALUAN SI ESTAN A TRUE LOS ESTADOS DE NAVEGACION (deleUser, okCheck)
   if (okCheck) {
-    /// aqwui vamos a hacer  el autologin para cuando viene del register
-    // para cuando viene del login lo gestionamos en el usecheckCodeError ---> modificamos el localstorage y el user del contexto
+    ///  vamos a hacer  el autologin para cuando viene del register
+    //   para cuando viene del login lo gestionamos en el usecheckCodeError ---> modificamos el localstorage y el user del contexto
     if (!localStorage.getItem("user")) {
       useAutoLogin(allUser, login);
     } else {
@@ -98,13 +108,14 @@ export const CheckCode = () => {
   }
 
   if (okDeleteUser) {
-    // si borramos al useer por meter el codigo mal lo mandamos de nuevo a registrase
+    // si borramos al user por meter el codigo mal lo mandamos de nuevo a registrase
     return <Navigate to="/register" />;
   }
 
   if (userNotFound) {
     /// lo mando al login porque aparece un 404 de user no found porque me ha recargado la pagina y se ha reseteado allUser
-    // por lo cual no tengo acceso al email y no puedo reconocerlo en el back
+    /// ------> SI SE RECARGA LA PÁGINA LOS ESTADOS SE RESETEAN POR LO TANTO EL allUser tiene el valor incial 
+    // por lo cual no tengo acceso al email y no puedo reconocerlo en el back. Cuando venga del login ya tendremos esos datos
 
     return <Navigate to="/login" />;
   }

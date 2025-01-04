@@ -13,7 +13,9 @@ import {
 } from "../pages";
 import { Protected, ProtectedCheckChildren } from "../components";
 
-
+/**
+ * Vamos a crear las rutas de la app y su correspondiente componente de proteccion 
+ */
 
 export const router = createBrowserRouter([
   {

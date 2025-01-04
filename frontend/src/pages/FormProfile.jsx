@@ -19,6 +19,11 @@ export const FormProfile = () => {
 
   //! ------------ 1) La funcion que gestiona el formulario----
   const formSubmit = (formData) => {
+
+    /**
+     * En  este caso vamos a preguntar si quiere o no hacer la peticion 
+     * de cambio de los datos del perfil
+     */
     Swal.fire({
       title: "Are you sure you want to change your data profile?",
       icon: "warning",
@@ -28,8 +33,15 @@ export const FormProfile = () => {
       confirmButtonText: "YES",
     }).then(async (result) => {
       if (result.isConfirmed) {
+
+        /**
+         * Si nos confirma que finalmente que quiere cambiar los datos vamos a comprobar si nos 
+         * envio por el formulario una imagen
+         */
         const inputFile = document.getElementById("file-upload").files;
 
+
+        // --------SINOS ENVIO IMAGEN---------------
         if (inputFile.length != 0) {
           const custonFormData = {
             ...formData,
@@ -40,6 +52,7 @@ export const FormProfile = () => {
           setRes(await updateUser(custonFormData));
           setSend(false);
         } else {
+          // -----------SI NO NOS ENVIO IMAGEN -----
           const custonFormData = {
             ...formData,
           };
@@ -74,7 +87,6 @@ export const FormProfile = () => {
                 id="name"
                 name="name"
                 autoComplete="false"
-                // LO NUEVOOOOOOOO------>
                 defaultValue={defaultData?.name}
                 {...register("name")}
               />

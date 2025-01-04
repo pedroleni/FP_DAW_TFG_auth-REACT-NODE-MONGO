@@ -9,9 +9,10 @@ export const ForgotPassword = () => {
   const [res, setRes] = useState({});
   const [send, setSend] = useState(false);
   const [forgotOk, setForgotOk] = useState(false);
-  //! 1)-------------------- LA FUNCIOON QUE SE ENCARGA DE GESTIONAR LOS DATOS DEL FORMULARIO
+  //! 1)-------------------- LA FUNCION QUE SE ENCARGA DE GESTIONAR LOS DATOS DEL FORMULARIO
 
   const formSubmit = async (formData) => {
+    // EL FORMDATA INCLUYE EL CORREO DEL USUARIO LOGADO 
     setSend(true);
     setRes(await forgotPasswordUser(formData));
     setSend(false);
@@ -21,7 +22,7 @@ export const ForgotPassword = () => {
     useForgotPasswordError(res, setRes, setForgotOk);
   }, [res]);
 
-  //! 3) ---------------- ESTADOS DE NAVEGACION O QUE LA fiuncion ESTA ok
+  //! 3) ---------------- ESTADOS DE NAVEGACION ---- hemos cumplido con la funcionalidad principal del componente
   if (forgotOk) {
     return <Navigate to="/login" />;
   }

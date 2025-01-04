@@ -24,7 +24,7 @@ export const Login = () => {
   }, [res]);
 
   useEffect(() => {
-    // deslogamos al user si hay algun usuario logado
+    // al montarse el componente vamos a deslogar a los  usuarios logados
     setUser(() => null);
     localStorage.removeItem("user");
   }, []);

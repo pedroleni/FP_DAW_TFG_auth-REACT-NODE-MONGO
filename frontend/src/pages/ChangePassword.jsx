@@ -16,7 +16,10 @@ export const ChangePassword = () => {
   const formSubmit = (formData) => {
     const { password, newPassword, confirmPassword } = formData;
 
+
+    // vamos a comprobar que sean iguales la nueva y su confirmacion
     if (newPassword == confirmPassword) {
+      /// si son iguales le preguntaremos si quiere cambiar la contraseña
       Swal.fire({
         title: "Are you sure you want to change your password?",
         icon: "warning",
@@ -47,7 +50,7 @@ export const ChangePassword = () => {
     useChangePasswordError(res, setRes, setUser);
   }, [res]);
 
-  //! no tenemos condicionales de navegacion porque cuando me desloguee el componente protected me llevara al login
+  //! no tenemos condicionales de navegacion porque cuando me deslogue el componente protected me llevara al login
 
   return (
     <>
