@@ -63,11 +63,14 @@ a {
   margin-top: 25px;
   background: var(--background-color);
   color: #fff;
-  cursor: pointer;
   border: var(--background-color) 1px solid;
   border-radius: 5px;
   font-family: inherit;
   font-size: inherit;
+}
+
+.form-wrap .btn:enabled {
+  cursor: pointer;
 }
 
 .form-wrap .btn:hover {

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { forgotPasswordUser } from "../services/user.service";
 import { useForgotPasswordError } from "../hooks";
+import { Spinner } from "../components";
 
 export const ForgotPassword = () => {
   const { handleSubmit, register } = useForm();
@@ -12,7 +13,7 @@ export const ForgotPassword = () => {
   //! 1)-------------------- LA FUNCION QUE SE ENCARGA DE GESTIONAR LOS DATOS DEL FORMULARIO
 
   const formSubmit = async (formData) => {
-    // EL FORMDATA INCLUYE EL CORREO DEL USUARIO LOGADO 
+    // EL FORMDATA INCLUYE EL CORREO DEL USUARIO LOGADO
     setSend(true);
     setRes(await forgotPasswordUser(formData));
     setSend(false);
@@ -53,7 +54,7 @@ export const ForgotPassword = () => {
               disabled={send}
               style={{ background: send ? "#49c1a388" : "#49c1a2" }}
             >
-              Change password
+              {send ? <Spinner /> : "CHANGE PASSWORD"}
             </button>
           </div>
 

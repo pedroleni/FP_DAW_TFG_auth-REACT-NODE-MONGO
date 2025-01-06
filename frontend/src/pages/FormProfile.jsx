@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 
 import "./FormProfile.css";
-import { FigureUser, Uploadfile } from "../components";
+import { FigureUser, Spinner, Uploadfile } from "../components";
 import { useAuth } from "../context/authContext";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2/dist/sweetalert2.all.js";
@@ -19,9 +19,8 @@ export const FormProfile = () => {
 
   //! ------------ 1) La funcion que gestiona el formulario----
   const formSubmit = (formData) => {
-
     /**
-     * En  este caso vamos a preguntar si quiere o no hacer la peticion 
+     * En  este caso vamos a preguntar si quiere o no hacer la peticion
      * de cambio de los datos del perfil
      */
     Swal.fire({
@@ -33,13 +32,11 @@ export const FormProfile = () => {
       confirmButtonText: "YES",
     }).then(async (result) => {
       if (result.isConfirmed) {
-
         /**
-         * Si nos confirma que finalmente que quiere cambiar los datos vamos a comprobar si nos 
+         * Si nos confirma que finalmente que quiere cambiar los datos vamos a comprobar si nos
          * envio por el formulario una imagen
          */
         const inputFile = document.getElementById("file-upload").files;
-
 
         // --------SINOS ENVIO IMAGEN---------------
         if (inputFile.length != 0) {
@@ -102,7 +99,7 @@ export const FormProfile = () => {
                 disabled={send}
                 style={{ background: send ? "#49c1a388" : "#49c1a2" }}
               >
-                CHANGE DATA PROFILE
+                {send ? <Spinner /> : "CHANGE DATA PROFILE"}
               </button>
             </div>
           </form>

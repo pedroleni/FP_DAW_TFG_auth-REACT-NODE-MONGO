@@ -7,6 +7,7 @@ import {
 } from "../services/user.service";
 import { useAuth } from "../context/authContext";
 import { useAutoLogin, useCheckCodeError, useResendCodeError } from "../hooks";
+import { Spinner } from "../components";
 
 export const CheckCode = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export const CheckCode = () => {
   // resResend va a ser para gestionar el renvio del codigo de confirmacion
   const [resResend, setResResend] = useState({});
   const [send, setSend] = useState(false);
+  const [sendResend, setSendResend] = useState(false);
   const [okCheck, setOkCheck] = useState(false);
 
   // ------> estos dos estados se utilizan para cuando se recarga la pagin por el usuario
@@ -24,18 +26,14 @@ export const CheckCode = () => {
   const [userNotFound, setUserNotFound] = useState(false);
   //! -------FUNCION QUE GESTIONA LA DATA DEL FORMULARIO-------
   const formSubmit = async (formData) => {
-
     /**
      * -- VAMOS A COMPROBAR POR DONDE ESTA EL USUARIO ACCEDIENDO AL CHECK SI DESDE EL LOGIN O DESDE EL REGISTER-----
      * ya que si es desde el registro utilizaremos el estado allUser del contexto
      */
     const userLocal = localStorage.getItem("user");
 
-
-
     /// --------------- ACCEDE DESDE EL REGISTER -----------
     if (userLocal == null) {
-      
       const custFormData = {
         confirmationCode: parseInt(formData.confirmationCode),
         email: allUser.data.user.email,
@@ -44,7 +42,7 @@ export const CheckCode = () => {
       setRes(await checkCodeConfirmationUser(custFormData));
       setSend(false);
     } else {
-          /// --------------- ACCEDE DESDE EL LOGIN -----------
+      /// --------------- ACCEDE DESDE EL LOGIN -----------
       const parseUser = JSON.parse(userLocal);
       const customFormData = {
         email: parseUser.email,
@@ -66,17 +64,17 @@ export const CheckCode = () => {
         email: parseUser.email,
       };
 
-      setSend(true);
+      setSendResend(true);
       setResResend(await resendCodeConfirmationUser(customFormData));
-      setSend(false);
+      setSendResend(false);
     } else {
       const customFormData = {
         email: allUser?.data?.user?.email,
       };
 
-      setSend(true);
+      setSendResend(true);
       setResResend(await resendCodeConfirmationUser(customFormData));
-      setSend(false);
+      setSendResend(false);
     }
   };
 
@@ -114,7 +112,7 @@ export const CheckCode = () => {
 
   if (userNotFound) {
     /// lo mando al login porque aparece un 404 de user no found porque me ha recargado la pagina y se ha reseteado allUser
-    /// ------> SI SE RECARGA LA PÁGINA LOS ESTADOS SE RESETEAN POR LO TANTO EL allUser tiene el valor incial 
+    /// ------> SI SE RECARGA LA PÁGINA LOS ESTADOS SE RESETEAN POR LO TANTO EL allUser tiene el valor incial
     // por lo cual no tengo acceso al email y no puedo reconocerlo en el back. Cuando venga del login ya tendremos esos datos
 
     return <Navigate to="/login" />;
@@ -148,28 +146,27 @@ export const CheckCode = () => {
               disabled={send}
               style={{ background: send ? "#49c1a388" : "#49c1a2" }}
             >
-              Verify Code
+              {send ? <Spinner /> : "Verify Code"}
             </button>
           </div>
-          <div className="btn_container">
-            <button
-              id="btnResend"
-              className="btn"
-              disabled={send}
-              style={{ background: send ? "#49c1a388" : "#49c1a2" }}
-              onClick={() => handleReSend()}
-            >
-              Resend Code
-            </button>
-          </div>
-
-          <p className="bottom-text">
-            <small>
-              If the code is not correct ❌, your user will be deleted from the
-              database and you will need to register again.{" "}
-            </small>
-          </p>
         </form>
+        <div className="btn_container">
+          <button
+            id="btnResend"
+            className="btn"
+            disabled={sendResend}
+            style={{ background: sendResend ? "#49c1a388" : "#49c1a2" }}
+            onClick={() => handleReSend()}
+          >
+            {sendResend ? <Spinner /> : "Resend Code"}
+          </button>
+        </div>
+        <p className="bottom-text">
+          <small>
+            If the code is not correct ❌, your user will be deleted from the
+            database and you will need to register again.{" "}
+          </small>
+        </p>
       </div>
     </>
   );

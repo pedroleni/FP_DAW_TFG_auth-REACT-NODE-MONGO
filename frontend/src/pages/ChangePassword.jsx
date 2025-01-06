@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2/dist/sweetalert2.all.js";
 import { changePasswordUserToken } from "../services/user.service";
 import { useChangePasswordError } from "../hooks";
+import { Spinner } from "../components";
 
 export const ChangePassword = () => {
   const { setUser } = useAuth();
@@ -15,7 +16,6 @@ export const ChangePassword = () => {
 
   const formSubmit = (formData) => {
     const { password, newPassword, confirmPassword } = formData;
-
 
     // vamos a comprobar que sean iguales la nueva y su confirmacion
     if (newPassword == confirmPassword) {
@@ -104,7 +104,7 @@ export const ChangePassword = () => {
               disabled={send}
               style={{ background: send ? "#49c1a388" : "#49c1a2" }}
             >
-              CHANGE PASSWORD
+              {send ? <Spinner /> : "CHANGE PASSWORD"}
             </button>
           </div>
         </form>

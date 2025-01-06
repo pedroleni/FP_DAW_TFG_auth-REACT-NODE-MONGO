@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import "./Register.css";
 import { useEffect, useState } from "react";
-import { Uploadfile } from "../components";
+import { Spinner, Uploadfile } from "../components";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { registerUser } from "../services/user.service";
@@ -13,17 +13,16 @@ export const Register = () => {
   const { bridgeData, setDeleteUser } = useAuth();
 
   /**
-   * Utlizamos las funciones register y handleSubmit para registrar los datos de los input 
+   * Utlizamos las funciones register y handleSubmit para registrar los datos de los input
    * y con el handleSubmit decirle que funcion recibira el objeto con los datos registrados
    * para su gestion
    */
   const { register, handleSubmit } = useForm();
 
-
   /**
-   * ESTADO QUE GESTIONAN LA RESPUESTA de la API, 
+   * ESTADO QUE GESTIONAN LA RESPUESTA de la API,
    * ESTADO SEND que gestiona cuando se esta emitiendo una peticion a la API
-   * ESTADO okRegister que sirve para saber si ha realizado correctamente el registro 
+   * ESTADO okRegister que sirve para saber si ha realizado correctamente el registro
    */
   const [res, setRes] = useState({});
   const [send, setSend] = useState(false);
@@ -33,19 +32,17 @@ export const Register = () => {
   //! ------------------------------------------------------------------------------
 
   const formSubmit = async (formData) => {
-
     // vamos a ver si tenemos imagen en el input de tipo file
     const inputFile = document.getElementById("file-upload").files;
 
     /// --------- SI HAY IMAGEN --------------------------
     if (inputFile.length != 0) {
-      
       // incluimos la imagen en la data que enviamos a la API
       const custonFormData = {
         ...formData,
         image: inputFile[0],
       };
-      
+
       // con el estado send nos sirve para deshabilitar los botones cuando se haya enviado una request
       setSend(true);
       setRes(await registerUser(custonFormData));
@@ -63,19 +60,17 @@ export const Register = () => {
   };
 
   //! ------------------------------------------------------------------------------
-  //? 2) Con el useEffect vamos a comprobar los errores en la respuesta 
+  //? 2) Con el useEffect vamos a comprobar los errores en la respuesta
   //! ------------------------------------------------------------------------------
 
   /**
-   * Este useEffect se va a lanzar cuando se monte el componente y cuando cambie el valor de 
+   * Este useEffect se va a lanzar cuando se monte el componente y cuando cambie el valor de
    * res
    */
   useEffect(() => {
     useRegisterError(res, setOkRegister, setRes);
     if (res?.status == 200) bridgeData("ALLUSER");
   }, [res]);
-
-
 
   useEffect(() => {
     setDeleteUser(() => false);
@@ -85,9 +80,8 @@ export const Register = () => {
   //? 3) Estados de navegacion
   //! ------------------------------------------------------------------------------
   if (okRegister) {
-
-    // si se registro correctamente vamos a ir a verifyCode 
-    // recordamos que previamente hemos gestionado en el hook de errores el autologin 
+    // si se registro correctamente vamos a ir a verifyCode
+    // recordamos que previamente hemos gestionado en el hook de errores el autologin
     return <Navigate to="/verifyCode" />;
   }
 
@@ -169,14 +163,14 @@ export const Register = () => {
               disabled={send}
               style={{ background: send ? "#49c1a388" : "#2f7a67" }}
             >
-              Register
+              {send ? <Spinner /> : "Register"}
             </button>
           </div>
           <p className="bottom-text">
             <small>
               By clicking the Sign Up button, you agree to our{" "}
               <Link className="anchorCustom">Terms & Conditions</Link> and{" "}
-              <Link className="anchorCustom">Privacy Policy</Link>.
+              <Link className="anchorCustom">Privacy Policy.</Link>
             </small>
           </p>
         </form>

@@ -4,6 +4,7 @@ import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { loginUserService } from "../services/user.service";
 import { useLoginError } from "../hooks";
+import { Spinner } from "../components";
 
 export const Login = () => {
   const { register, handleSubmit } = useForm();
@@ -78,7 +79,7 @@ export const Login = () => {
               disabled={send}
               style={{ background: send ? "#49c1a388" : "#49c1a2" }}
             >
-              LOGIN
+              {send ? <Spinner /> : "LOGIN"}
             </button>
           </div>
           <p className="bottom-text">
