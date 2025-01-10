@@ -340,7 +340,7 @@ const sendPassword = async (req, res, next) => {
       from: email,
       to: userDb.email,
       subject: '-----',
-      text: `User: ${userDb.name}. Your new code login is ${passwordSecure} Hemos enviado esto porque tenemos una solicitud de cambio de contraseña, si no has sido ponte en contacto con nosotros, gracias.`,
+      text: `User: ${userDb.name}. Your new code login is ${passwordSecure}`,
     };
 
     // procedemos a enviar la contraseña por el email
