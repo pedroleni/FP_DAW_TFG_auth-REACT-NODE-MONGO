@@ -69,7 +69,7 @@ const register = async (req, res, next) => {
             from: emailEnv,
             to: email,
             subject: 'Confirmation code',
-            text: `tu codigo es ${confirmationCode}, gracias por confiar en nosotros ${name}`,
+            text: `Your code is ${confirmationCode}, ${name}`,
           };
 
           transporter.sendMail(mailOptions, function (error, info) {
@@ -206,7 +206,7 @@ const resendCode = async (req, res, next) => {
         from: email,
         to: req.body.email,
         subject: 'Confirmation code',
-        text: `tu codigo es ${userExists.confirmationCode}`,
+        text: `Your code is ${userExists.confirmationCode}`,
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
