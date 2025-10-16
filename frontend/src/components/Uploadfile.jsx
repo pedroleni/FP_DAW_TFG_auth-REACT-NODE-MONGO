@@ -76,12 +76,14 @@ export const Uploadfile = ({ registerForm }) => {
       />
 
       <label htmlFor="file-upload" id="file-drag">
+      
         <img id="file-image" src="#" alt="Preview" className="hidden" />
         <div id="start">
           <i className="fa fa-download" aria-hidden="true"></i>
           <div className="divSelect">Select a file or drag here</div>
           <div id="notimage" className="hidden">
             Please select an image
+            'jpg', 'png', 'jpeg', 'gif', 'svg', 'webp'
           </div>
           <span id="file-upload-btn" className="btn btn-primary">
             Select a file

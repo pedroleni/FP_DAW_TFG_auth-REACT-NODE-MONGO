@@ -9,7 +9,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'UserFTProyect',
-    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'svg', 'webp', 'heic'],
+    allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'svg', 'webp'],
   },
 });
 
