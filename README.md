@@ -29,4 +29,6 @@ PORT=
 
 Estos valores son los referentes a cloudinary, gmail (email y contraseña), JWT, URI de conexión a Mongo DB y por ultimo el puerto de la API.
 
+DOC del proyecto final: https://drive.google.com/file/d/170fv1GIN24ZLv1jAIxkP02A0tXCXn4Bh/view
+
 link de diagrama de Gantt con la planificación del proyecto: https://sassy-silver-6ca.notion.site/14c2f387d5c380aa86dde753ef311c3f?v=1b3f9641859f42efa7d4ba6c6eae1e39
